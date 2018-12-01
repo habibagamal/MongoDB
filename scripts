@@ -1,0 +1,182 @@
+////creating users////
+
+db.users.insert({ name:"Habiba", gender:"female", age:20, email:"habibabassem@yahoo.com", username:"habibabassem", password:"1234", profilePic:"users/desktop/pic1.jpg", creationDate:"30-11-2018", posts:[{ postNum:1, postDate:"30-11-2018", postTime:"11:28", postText:"Hi! This is my first post"}]});
+
+
+
+db.users.insert({name:"Salma", gender:"female", age:22, email:"salma@yahoo.com", username:"salma", password:"1234", profilePic:"users/desktop/salmapic.jpg", creationDate:"01-12-2018"});
+
+
+
+db.users.insert({name:"Omar", gender:"male", age:12, username:"omar", password:"123", profilePic:"users/desktop/omarpic.jpg", creationDate:"01-01-2018", pictures:[{ actualPic:"users/desktop/upload.jpg", caption: "This is my first picture" }]});
+
+
+
+
+////updating users/////
+
+db.users.update({name:"Omar"},{$set:{age:18}});
+
+
+
+
+/////////////Deleting Users///////
+
+db.users.remove({name:"Salma"});
+
+
+
+
+
+//////////Create Post//////////////
+
+db.users.update({username:"omar"}, {$set:{posts:[{ postNum:2, postText:"What a nice day today", postDate:"2-1-2018", postTime:"12:30"}]}});
+
+
+
+
+
+//////////////////Edit a post/////////////////
+
+db.users.update({username:"omar","posts.postNum":2},{$set:{"posts.0.postText":"Hello all. I edited my post!!!"}});
+
+
+
+
+
+/////////////////Delete a Post/////////////
+
+db.users.update({username:"omar"},{$unset:{"posts.0.postNum":2,"posts.0.postText":"Hello all. I edited my post!!!","posts.0.postDate":"2-1-2018","posts.0.postTime":"12:30"}});
+
+
+
+
+//////////////Alternative to Deletion//////////////////////
+
+db.users.update({username:"omar"},{$pull:{"posts":{"postNum":2, "postText":"Hello all. I edited my post!!!", "postDate":"2-1-2018", "postTime":"12:30"}}});
+
+
+
+
+
+///////////Add a picture/////////
+
+ db.users.update({username:"habibabassem"}, {$set:{pictures:[{actualPic:"desktop/habibabassem/pic.jpg", caption:"What a beautiful sunny day",picNum:2}]}});
+
+
+
+
+
+
+/////////////////Edit a picture///////////////
+
+db.users.update({username:"habibabassem","pictures.picNum":2},{$set:{"pictures.0.caption":"Last summer!!!!"}});
+
+
+
+
+
+//////////////////////Delete a pic////////////
+
+db.users.update({username:"habibabassem"},{$pull:{"pictures":{"picNum":2, "caption":"Last summer!!!!", "actualPic":"desktop/habibabassem/pic.jpg" }}});
+
+
+
+
+
+////////////Add a comment on a post////////////
+
+db.users.update({username:"habibabassem","posts.0.postNum":1},{$set:{"posts.0.comments":[{ comNum:1, comText: "wow!!such a beautiful memory", commenter:"omar" }]}});
+
+
+
+
+
+////////////////Add a comment on a pic///////////
+
+db.users.update({username:"omar","pictures.0.caption":"This is my first picture" } ,{$set:{"pictures.0.comments":[{ comNum:2, comText: "hahaha! looks cool", commenter:"habibabassem" }]}});
+
+
+
+
+
+/////////////////Add a comment on a comment/////////
+
+db.users.update({username:"omar","pictures.0.comments.0.comNum": 2} ,{$set:{"pictures.0.comments.0.subComments":[{ comNum:3, comText: "Thanks, habiba!!", commenter:"omar" }]}});
+
+
+
+
+
+/////////////////Edit comment////////////////
+
+db.users.update({username:"omar","pictures.0.comments.0.comNum": 2} ,{$set:{"pictures.0.comments.0.subComments.0.comText":"Best Sis EVERRR"}});
+
+
+
+
+
+
+//////////////////Delete a comment////////////
+
+db.users.update({username:"habibabassem","posts.0.postNum":1},{$pull:{"posts.0.comments":{ comNum:1, comText: "wow!!such a beautiful memory", commenter:"omar" }}});
+
+
+
+
+
+
+///////////////////Create a reaction on a post//////////
+
+db.users.update({username:"habibabassem","posts.0.postNum":1},{$set:{"posts.0.reactions":[{ rNum:1, reaction: "like", reactor:"omar" }]}});
+
+
+
+
+
+///////////////////Create a reaction on a picture//////////
+
+db.users.update({username:"omar","pictures.0.caption":"This is my first picture" } ,{$set:{"pictures.0.reactions":[{ rNum:2, reaction: "happy", reactor:"habibabassem" }]}});
+
+
+
+
+///////////////////Create a reaction on a comment//////////
+
+
+db.users.update({username:"omar","pictures.0.comments.0.comNum": 2} ,{$set:{"pictures.0.comments.0.reactions":[{ rNum:3, reaction: "ANGRY", reactor:"omar" }]}});
+
+
+
+
+
+//////////////////Create a reaction on a subcomment//////////
+
+db.users.update({username:"omar","pictures.0.comments.0.subComments.0.comNum": 3} ,{$set:{"pictures.0.comments.0.subComments.0.reactions":[{ rNum:4, reaction: "love", reactor:"habibabassem" }]}});
+
+
+
+
+
+///////////////////Edit a reaction on a subcomment//////////
+
+db.users.update({username:"omar","pictures.0.comments.0.subComments.0.reactions.0.rNum": 4} ,{$set:{"pictures.0.comments.0.subComments.0.reactions.0.reaction":"dislike"}});
+
+
+
+
+
+///////////////////Edit a reaction on a comment//////////
+
+db.users.update({username:"omar","pictures.0.comments.0.reactions.0.rNum": 3} ,{$set:{"pictures.0.comments.0.reactions.0.reaction":"sad"}});
+
+
+
+
+
+/////////////////Delete a reaction//////////
+
+db.users.update({username:"omar","pictures.0.caption":"This is my first picture" } ,{$pull:{"pictures.0.reactions":{ rNum:2, reaction: "happy", reactor:"habibabassem" }}});
+
+
+
